@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fell Free — Living Desk Virtual Diary</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- JavaScript Files -->
+  <script src="audio.js" defer></script>
+  <script src="ritual.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- Cinematic Container for Camera Breathing & Shake -->
+  <div class="cinematic-container">
+    
+    <!-- HEADER BAR -->
+    <header>
+      <div class="logo">
+        <svg class="logo-feather" viewBox="0 0 24 24">
+          <path d="M5.5 20c-1.38 0-2.5-1.12-2.5-2.5 0-1.02.61-1.9 1.48-2.28L12 8l.5 3.5L5.7 18.3c-.13.12-.2.3-.2.48 0 .41.34.75.75.75H12l.5 2H5.5m9.28-14.73c.18-.74.91-1.2 1.65-1.02.74.18 1.2.91 1.02 1.65l-.36 1.47-2.31-.57.36-1.47M13 10.73l2.31.57-7.23 8.7H6v-2.08l7-8.19z"/>
+        </svg>
+        <div class="logo-text">
+          <h1>Fell Free</h1>
+          <span>Write. Reflect. Be Free.</span>
+        </div>
+      </div>
+      
+      <nav>
+        <ul>
+          <li class="active"><a href="#" data-tab="diary">Diary</a></li>
+          <li><a href="#" data-tab="journal">Journal</a></li>
+          <li><a href="#" data-tab="music">Music</a></li>
+          <li><a href="#" data-tab="calendar">Calendar</a></li>
+          <li><a href="#" data-tab="goals">Goals</a></li>
+        </ul>
+      </nav>
+      
+      <div class="header-right">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle Morning/Night Mode">
+          <svg class="theme-sun-icon" width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="display:none;">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/>
+          </svg>
+          <svg class="theme-moon-icon" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 3c.132 0 .263 0 .393.007a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 3zm0 2a7 7 0 1 0 0 14 7.039 7.039 0 0 0 5.23-2.31 9.5 9.5 0 0 1-7.73-8.868A6.98 6.98 0 0 0 12 5z"/>
+          </svg>
+        </button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 22a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22zm7-6v-5c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C8.63 5.36 7 7.92 7 11v5l-2 2v1h14v-1l-2-2z"/>
+          </svg>
+        </button>
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Profile" class="profile-avatar">
+      </div>
+    </header>
+
+    <!-- Talisman Purify Button -->
+    <button class="purify-talisman-btn" id="purify-talisman-btn" aria-label="Restore Reality">
+      <span class="talisman-text">RESTORE REALITY</span>
+      <span class="talisman-runes">敕令</span>
+    </button>
+
+    <!-- MAIN VIEWPORT -->
+    <main>
+      
+      <!-- LEFT DASHBOARD COLUMN -->
+      <section class="left-panel">
+        <div class="welcome-msg">
+          <h2 id="welcome-title">Welcome back,<br>Writer</h2>
+          <p id="welcome-desc">This is your space. Write your thoughts, your stories, your life.</p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="diary-actions" id="diary-actions">
+          <button class="btn btn-primary" id="btn-open-diary">📖 Open Diary</button>
+          <button class="btn btn-secondary" id="btn-new-entry">✍ New Entry</button>
+        </div>
+
+        <!-- Music Player Card Widget -->
+        <div class="music-player-widget" id="music-player-widget">
+          <h3>📻 Focus Radio</h3>
+          <div class="track-info">
+            <span class="track-name" id="current-track-name">Track 1: Lo-Fi Study Chill</span>
+          </div>
+          <div class="music-controls">
+            <button class="music-btn" id="music-prev-btn" aria-label="Previous Track">⏮</button>
+            <button class="music-btn" id="music-toggle-btn" aria-label="Play/Pause">⏸</button>
+            <button class="music-btn" id="music-next-btn" aria-label="Next Track">⏭</button>
+            <button class="music-btn" id="music-mute-btn" aria-label="Mute/Unmute">🔊</button>
+          </div>
+          <div class="music-volume-row">
+            <label for="music-vol-slider">Vol</label>
+            <input type="range" class="music-volume-slider" id="music-vol-slider" min="0" max="1" step="0.05" value="0.4">
+          </div>
+        </div>
+        
+        <div class="inspiration-quote">
+          <blockquote>"The pen is mightier than the storm inside your mind."</blockquote>
+          <cite>— Anonymous</cite>
+        </div>
+      </section>
+
+      <!-- CENTER DIARY DESK VIEWPORT (Larger Desk Layout) -->
+      <section class="desk-scene-container">
+        
+        <div class="desk-surface">
+          <!-- Light Gradient layers -->
+          <div class="desk-light-layer"></div>
+          <div class="desk-candle-layer"></div>
+          <div class="desk-ambient-overlay"></div>
+          
+          <!-- Rain Window Background -->
+          <div class="window-frame">
+            <div class="window-glass">
+              <!-- Shadow person appearing in lightning strikes -->
+              <div class="spooky-shadow" id="spooky-shadow"></div>
+              <canvas id="window-rain-canvas" class="canvas-layer"></canvas>
+            </div>
+          </div>
+          
+          <!-- Relic Collectible Hotspots -->
+          <div class="relic-hotspot" id="relic-key" title="Key handle?"></div>
+          <div class="relic-hotspot" id="relic-crown" title="Books scratch?"></div>
+          <div class="relic-hotspot" id="relic-coin" title="Radio tuner?"></div>
+          <div class="relic-hotspot" id="relic-eye" title="Inside lantern?"></div>
+          <div class="relic-hotspot" id="relic-seal" title="Steam decal?"></div>
+          <div class="relic-hotspot" id="relic-stone" title="Window corner?"></div>
+          <div class="relic-hotspot" id="relic-feather" title="Behind skull?"></div>
+
+          <!-- Left Stack of Books -->
+          <div class="books-left">
+            <!-- Glowing haunted eyes hidden in the books stacking -->
+            <div class="haunted-eyes" id="haunted-eyes-1">
+              <span class="eye-pupil left-pupil"></span>
+              <span class="eye-pupil right-pupil"></span>
+            </div>
+            <svg class="books-svg" viewBox="0 0 120 80">
+              <path d="M10 50h90v15H10z" fill="#4a3b32" stroke="#000" stroke-width="3"/>
+              <path d="M15 50h80v1H15z" fill="#755e51"/>
+              <path d="M8 30h94v20H8z" fill="#2d3748" stroke="#000" stroke-width="3"/>
+              <path d="M12 30h86v1H12z" fill="#4a5568"/>
+              <!-- Book titles gold leaf -->
+              <path d="M30 38h45v3H30z" fill="#c5a880"/>
+              <path d="M30 57h50v2H30z" fill="#c5a880"/>
+              <!-- Pages borders -->
+              <path d="M100 52v11h6V52z" fill="#ede7e0" stroke="#000" stroke-width="2"/>
+              <path d="M102 32v16h6V32z" fill="#ede7e0" stroke="#000" stroke-width="2"/>
+            </svg>
+          </div>
+
+          <!-- Small Notepad -->
+          <div class="notepad-small">
+            <svg class="notepad-svg" viewBox="0 0 50 50">
+              <rect x="5" y="5" width="40" height="40" rx="3" fill="#fff" stroke="#000" stroke-width="3"/>
+              <rect x="5" y="5" width="40" height="8" rx="1" fill="#7c6d62" stroke="#000" stroke-width="2"/>
+              <!-- Binder ring wire loops -->
+              <circle cx="12" cy="5" r="2.5" fill="none" stroke="#000" stroke-width="2"/>
+              <circle cx="25" cy="5" r="2.5" fill="none" stroke="#000" stroke-width="2"/>
+              <circle cx="38" cy="5" r="2.5" fill="none" stroke="#000" stroke-width="2"/>
+              <!-- Text scribble -->
+              <path d="M10 20h25M10 28h30M10 36h20" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Steaming Coffee Cup -->
+          <div class="coffee-cup">
+            <svg class="coffee-svg" viewBox="0 0 60 60">
+              <!-- Steam waves -->
+              <path class="steam-path" d="M18 18c-3-3-3-9 0-12s3-9 0-12"/>
+              <path class="steam-path" d="M26 18c-3-3-3-9 0-12s3-9 0-12" style="animation-delay: 1.5s;"/>
+              
+              <!-- Cup body -->
+              <path d="M10 24h32v20c0 6-6 10-16 10S10 50 10 44V24z" fill="#1e1e24" stroke="#000" stroke-width="3"/>
+              <!-- Tree Decal -->
+              <path d="M26 34v10m-3-6l3-3 3 3m-4-2l4-4 4 4" stroke="#c5a880" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <!-- Cup Handle -->
+              <path d="M42 28c5 0 8 3 8 7s-3 7-8 7" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <!-- Hidden Activation Skull -->
+          <div class="hidden-skull" id="skull-trigger">
+            <svg class="skull-svg" viewBox="0 0 40 45">
+              <!-- Skull Head bone -->
+              <path d="M6 18C6 9 12 4 20 4s14 5 14 14c0 6-2 9-5 12v6a3 3 0 0 1-3 3h-12a3 3 0 0 1-3-3v-6c-3-3-5-6-5-12z" fill="#ede7e0" stroke="#000" stroke-width="3"/>
+              <!-- Jaw contours -->
+              <path d="M12 37h16M15 34h10" stroke="#000" stroke-width="2.5"/>
+              <!-- Eye sockets -->
+              <circle class="skull-eyes" cx="15" cy="18" r="4.5" fill="#000"/>
+              <circle class="skull-eyes" cx="25" cy="18" r="4.5" fill="#000"/>
+              <!-- Nose cavity -->
+              <path d="M20 22l-2 3.5h4z" fill="#000"/>
+              <!-- Teeth notches -->
+              <path d="M16 37v3m4-3v3m4-3v3" stroke="#000" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <!-- Computer Monitor Dashboard -->
+          <div class="monitor-wrapper">
+            <div class="monitor-screen">
+              
+              <!-- NORMAL SCREEN MODE -->
+              <div class="monitor-content-normal">
+                <div class="monitor-bg-image"></div>
+                <div class="monitor-inner">
+                  
+                  <div class="monitor-quote">
+                    "Every page you write, is a step towards understanding yourself."
+                    <div class="monitor-visualizer">
+                      <span class="monitor-vis-bar"></span>
+                      <span class="monitor-vis-bar"></span>
+                      <span class="monitor-vis-bar"></span>
+                      <span class="monitor-vis-bar"></span>
+                      <span class="monitor-vis-bar"></span>
+                    </div>
+                  </div>
+
+                  <div class="monitor-time-row">
+                    <div>
+                      <div class="monitor-time" id="monitor-time">22:47</div>
+                      <div class="monitor-date" id="monitor-date">Wednesday 24 April 2025</div>
+                    </div>
+                    
+                    <div class="monitor-weather-widget">
+                      <svg class="weather-icon-svg" viewBox="0 0 24 24">
+                        <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/>
+                      </svg>
+                      <div>
+                        <span class="monitor-weather-temp">16°C</span>
+                        <div>Rainy Night</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- FORBIDDEN LORE/RELICS SCREEN MODE -->
+              <div class="monitor-content-forbidden">
+                <div class="occult-monitor-title">
+                  <span>✦ COVENANT RUNES ✦</span>
+                  <span class="rituals-completed-count">0/8</span>
+                </div>
+                
+                <div class="occult-monitor-grid">
+                  <div class="occult-grid-item">
+                    <h4>RELICS ACQUIRED</h4>
+                    <ul class="relics-list" style="list-style:none; padding:0;">
+                    </ul>
+                  </div>
+                  <div class="occult-grid-item">
+                    <h4>SEALED SECRETS</h4>
+                    <ul class="achievements-list" style="list-style:none; padding:0;">
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="occult-monitor-bottom">
+                  <div>RITUAL: <span class="current-ritual-name" style="color:var(--accent-gold)">None</span></div>
+                  <div>BLOOD MOON • 10°C</div>
+                </div>
+              </div>
+
+            </div>
+            
+            <div class="monitor-stand"></div>
+            <div class="monitor-base"></div>
+          </div>
+
+          <!-- Desk Lamp (Left) -->
+          <div class="desk-lamp">
+            <svg class="lamp-svg" viewBox="0 0 140 250">
+              <!-- base -->
+              <path d="M20 240h60v6H20z" fill="#0f1012" stroke="#000" stroke-width="3"/>
+              <!-- armature rods -->
+              <path d="M48 240L35 150l40-80" fill="none" stroke="#000" stroke-width="7" stroke-linecap="round"/>
+              <!-- joint circles -->
+              <circle cx="35" cy="150" r="8" fill="#c5a880" stroke="#000" stroke-width="2"/>
+              <circle cx="75" cy="70" r="8" fill="#c5a880" stroke="#000" stroke-width="2"/>
+              
+              <!-- lamp head shade -->
+              <path d="M55 70l35-40 25 15-30 45z" fill="#171a20" stroke="#000" stroke-width="3"/>
+              <!-- interior glowing bulb -->
+              <path class="lamp-bulb-glow" d="M90 48c3 4 5 10 5 15a20 20 0 0 1-40 0c0-5 2-11 5-15z"/>
+            </svg>
+          </div>
+
+          <!-- Candle Lantern -->
+          <div class="candle-lantern">
+            <svg class="lantern-svg" viewBox="0 0 50 100">
+              <!-- Base and Glass cylinder chassis -->
+              <rect x="10" y="40" width="30" height="45" rx="2" fill="none" stroke="#000" stroke-width="3"/>
+              <line x1="10" y1="40" x2="40" y2="40" stroke="#000" stroke-width="4"/>
+              <line x1="10" y1="85" x2="40" y2="85" stroke="#000" stroke-width="5"/>
+              
+              <!-- Metal top cap -->
+              <path d="M15 40l10-15 10 15z" fill="#1b1d1c" stroke="#000" stroke-width="2"/>
+              <circle cx="25" cy="20" r="4" fill="none" stroke="#000" stroke-width="2"/>
+              
+              <!-- Wax candle inside -->
+              <rect x="20" y="65" width="10" height="20" fill="#fcf6eb" rx="1" stroke="#000" stroke-width="2"/>
+              <!-- Wick -->
+              <line x1="25" y1="65" x2="25" y2="60" stroke="#000" stroke-width="1.5"/>
+              <!-- Candle Flame -->
+              <path class="candle-flame" d="M25 60c-2-3-2-7 0-9s2 6 0 9z"/>
+            </svg>
+          </div>
+
+          <!-- Vintage Radio -->
+          <div class="vintage-radio">
+            <!-- Blinking eyes hidden in radio chassis dial -->
+            <div class="haunted-eyes" id="haunted-eyes-2">
+              <span class="eye-pupil left-pupil"></span>
+              <span class="eye-pupil right-pupil"></span>
+            </div>
+            <svg class="radio-svg" viewBox="0 0 80 60">
+              <!-- Radio chassis -->
+              <rect x="2" y="5" width="76" height="50" rx="6" fill="#8c5845" stroke="#000" stroke-width="3"/>
+              <!-- Front speaker grill -->
+              <rect x="8" y="12" width="42" height="36" rx="2" fill="#d0c3ab" stroke="#000" stroke-width="2"/>
+              <path d="M12 12v36m6-36v36m6-36v36m6-36v36m6-36v36" stroke="#000" stroke-width="1.5"/>
+              
+              <!-- Dial indicators and Knobs -->
+              <rect x="56" y="12" width="16" height="15" fill="#f4ead3" rx="1" stroke="#000" stroke-width="2"/>
+              <line x1="64" y1="12" x2="64" y2="27" stroke="#b00" stroke-width="1"/>
+              
+              <!-- Tuning knobs -->
+              <circle cx="64" cy="36" r="5" fill="#1a1212" stroke="#000" stroke-width="1.5"/>
+              <circle cx="64" cy="46" r="4" fill="#1a1212" stroke="#000" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <!-- THE WRITING DIARY / NOTEBOOK COVER (Interactive) -->
+          <div class="diary-book-wrapper" id="diary-book-wrapper">
+            <div class="diary-book">
+              
+              <!-- Normal State Cover -->
+              <div class="diary-cover-normal" style="border:3px solid #000;">
+                <svg class="diary-emboss" viewBox="0 0 24 24">
+                  <path d="M5.5 20c-1.38 0-2.5-1.12-2.5-2.5 0-1.02.61-1.9 1.48-2.28L12 8l.5 3.5L5.7 18.3c-.13.12-.2 0-.2.48 0 .41.34.75.75.75H12l.5 2H5.5M13 10.73l2.31.57-7.23 8.7H6v-2.08l7-8.19z"/>
+                </svg>
+              </div>
+
+              <!-- Forbidden Occult State Cover -->
+              <div class="diary-cover-forbidden" style="border:3px solid #000;">
+                <!-- Metal corner protectors -->
+                <div class="notebook-metal-corner corner-tl"></div>
+                <div class="notebook-metal-corner corner-tr"></div>
+                <div class="notebook-metal-corner corner-bl"></div>
+                <div class="notebook-metal-corner corner-br"></div>
+                
+                <!-- Embossed glowing silver sigil -->
+                <svg class="sigil-svg" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"/>
+                  <!-- Star Pentagram Sigil pattern -->
+                  <path d="M50 15L61 46l32-1-25 21 9 31-27-18-27 18 9-31-25-21 32 1z" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="50" cy="50" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <div class="notebook-scratches"></div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Ash & Feather Particle Overlay Canvas -->
+          <canvas id="room-particles-canvas" class="canvas-layer"></canvas>
+
+        </div>
+      </section>
+
+      <!-- RIGHT DASHBOARD COLUMN -->
+      <section class="right-panel">
+        
+        <div class="card thoughts-card">
+          <h3>
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            Today's Thoughts
+          </h3>
+          <p>A page a day keeps the chaos away. Ready to reflect?</p>
+          <a href="#" class="card-link" id="btn-write-now">Write Now &rarr;</a>
+        </div>
+
+        <div class="card progress-card">
+          <h3>Daily Progress</h3>
+          <div class="progress-container">
+            <div class="progress-ring-wrapper">
+              <svg class="progress-ring" width="60" height="60">
+                <circle class="progress-ring-circle" stroke-width="5" stroke="#000" fill="transparent" r="23" cx="30" cy="30" stroke-dashoffset="44"/>
+              </svg>
+              <div class="progress-percentage">72%</div>
+            </div>
+            <div class="progress-desc">You are doing great!<br>Keep the flow going.</div>
+          </div>
+        </div>
+
+        <div class="card weather-card">
+          <h3>Weather</h3>
+          <div class="weather-container">
+            <svg class="weather-icon-svg" viewBox="0 0 24 24">
+              <path d="M19.36 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.64-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/>
+            </svg>
+            <div class="weather-info">
+              <div class="weather-temp">16°C</div>
+              <div style="color: var(--text-muted); font-size: 0.75rem;">Rainy Night. Perfect for writing.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card streak-card">
+          <h3>Streak</h3>
+          <div class="streak-number">12 Days</div>
+          <div class="streak-desc">Keep the streak alive!</div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- BOTTOM ROW FOOTER LINKS -->
+    <section class="bottom-section">
+      <div class="bottom-divider">Discover More</div>
+      
+      <div class="bottom-cards-grid">
+        <div class="bottom-card" data-tab="music">
+          <svg class="bottom-card-icon" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+          <div class="bottom-card-info">
+            <h4>Music</h4>
+            <p>Focus with calming sounds</p>
+          </div>
+        </div>
+
+        <div class="bottom-card" data-tab="calendar">
+          <svg class="bottom-card-icon" viewBox="0 0 24 24">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+          </svg>
+          <div class="bottom-card-info">
+            <h4>Calendar</h4>
+            <p>Plan your days, organize life</p>
+          </div>
+        </div>
+
+        <div class="bottom-card" data-tab="goals">
+          <svg class="bottom-card-icon" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
+          </svg>
+          <div class="bottom-card-info">
+            <h4>Goals</h4>
+            <p>Dream. Plan. Achieve.</p>
+          </div>
+        </div>
+
+        <div class="bottom-card" data-tab="quotes">
+          <svg class="bottom-card-icon" viewBox="0 0 24 24">
+            <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+          </svg>
+          <div class="bottom-card-info">
+            <h4>Quotes</h4>
+            <p>Words that inspire you</p>
+          </div>
+        </div>
+
+        <div class="bottom-card" id="bottom-settings-btn" data-tab="settings">
+          <svg class="bottom-card-icon" viewBox="0 0 24 24">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.49.42l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.66 8.52a.5.5 0 0 0 .12.64l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.42.49.42h4c.25 0 .44-.18.49-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z"/>
+          </svg>
+          <div class="bottom-card-info">
+            <h4>Settings</h4>
+            <p>Customize your experience</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mystery skull footer card -->
+      <div class="mystery-banner" id="mystery-banner">
+        <div class="mystery-banner-left">
+          <svg class="mystery-banner-icon" viewBox="0 0 40 45">
+            <path d="M6 18C6 9 12 4 20 4s14 5 14 14c0 6-2 9-5 12v6a3 3 0 0 1-3 3h-12a3 3 0 0 1-3-3v-6c-3-3-5-6-5-12z" fill="currentColor"/>
+            <circle cx="15" cy="18" r="4.5" fill="#000"/>
+            <circle cx="25" cy="18" r="4.5" fill="#000"/>
+          </svg>
+          <div class="mystery-banner-text">
+            <h4>Something lies hidden in this desk...</h4>
+            <p>Only the curious ones find what's not meant to be found.</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary" style="letter-spacing:2px; font-weight:bold;">???</button>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- NOTEBOOK WRITING SHEET OVERLAY -->
+  <div class="notebook-overlay" id="notebook-overlay">
+    
+    <div class="notebook-container" style="border:3px solid #000;">
+      <button class="notebook-close-btn" id="notebook-close-btn" aria-label="Close Notebook">&times;</button>
+      
+      <!-- Left Page (Menu/Info) -->
+      <div class="notebook-page notebook-left-page" id="notebook-left-page">
+      </div>
+      
+      <!-- Spine middle line -->
+      <div class="notebook-spine"></div>
+      
+      <!-- Right Page (Writing space/Lore view) -->
+      <div class="notebook-page notebook-right-page" id="notebook-right-page">
+      </div>
+      
+      <!-- Canvas overlaying book modal only for typewriter sparkles -->
+      <canvas id="writing-particles-canvas" class="canvas-layer"></canvas>
+    </div>
+
+  </div>
+
+  <!-- RITUAL CINEMATIC MAGIC OVERLAY -->
+  <div class="ritual-cinematic-overlay" id="ritual-cinematic-overlay">
+    <div class="manga-speed-lines"></div>
+    <div class="anime-ritual-circle-wrapper">
+      <svg class="anime-ritual-circle" viewBox="0 0 200 200">
+        <circle class="ring-outer" cx="100" cy="100" r="90" fill="none" stroke="#8b0000" stroke-width="3"/>
+        <circle class="ring-inner" cx="100" cy="100" r="76" fill="none" stroke="#8b0000" stroke-width="1.5" stroke-dasharray="8 6"/>
+        <circle class="ring-dotty" cx="100" cy="100" r="62" fill="none" stroke="#8b0000" stroke-width="1.5" stroke-dasharray="2 3"/>
+        <path class="magic-star" d="M100 10 L126 90 L195 40 L140 115 L175 185 L100 135 L25 185 L60 115 L5 40 L74 90 Z" fill="none" stroke="#8b0000" stroke-width="2"/>
+        <text class="magic-rune" x="93" y="32" fill="#8b0000" font-size="12">⛧</text>
+        <text class="magic-rune" x="156" y="78" fill="#8b0000" font-size="12">⛤</text>
+        <text class="magic-rune" x="136" y="152" fill="#8b0000" font-size="12">🕇</text>
+        <text class="magic-rune" x="52" y="152" fill="#8b0000" font-size="12">🕈</text>
+        <text class="magic-rune" x="32" y="78" fill="#8b0000" font-size="12">⛧</text>
+      </svg>
+    </div>
+    <div class="ritual-chant-box">
+      <div class="ritual-chant-title" id="ritual-chant-title">SUMMONING MEMORY RITUAL</div>
+      <div class="ritual-chant-countdown" id="ritual-chant-countdown">5</div>
+    </div>
+  </div>
+
+  <!-- SETTINGS SLIDE DRAWER PANEL -->
+  <div class="settings-panel" id="settings-panel" style="border-left: 3px solid #000;">
+    <div class="settings-header">
+      <h3>Desk Settings</h3>
+      <button class="icon-btn" id="settings-close-btn">&times;</button>
+    </div>
+    
+    <div class="settings-body">
+      
+      <div class="setting-row">
+        <label for="slide-darkness">Dark Theme Intensity</label>
+        <input type="range" class="setting-control-slider" id="slide-darkness" min="0.1" max="1.0" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-rain">Rain Ambient Volume</label>
+        <input type="range" class="setting-control-slider" id="slide-rain" min="0" max="1" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-thunder">Thunder Frequency</label>
+        <input type="range" class="setting-control-slider" id="slide-thunder" min="0.1" max="1" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-glow">Notebook Cover Pulse</label>
+        <input type="range" class="setting-control-slider" id="slide-glow" min="0" max="1" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-ink">Absorbed Ink Glow</label>
+        <input type="range" class="setting-control-slider" id="slide-ink" min="0" max="1" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-particles">Particle Density</label>
+        <input type="range" class="setting-control-slider" id="slide-particles" min="0.1" max="1.5" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-candle">Candle Flame Scale</label>
+        <input type="range" class="setting-control-slider" id="slide-candle" min="0.2" max="1.5" step="0.05">
+      </div>
+
+      <div class="setting-row">
+        <label for="slide-music">Occult Music Volume</label>
+        <input type="range" class="setting-control-slider" id="slide-music" min="0" max="1" step="0.05">
+      </div>
+
+      <div class="setting-row" style="margin-top: 15px;">
+        <label>Notebook Sub-Themes</label>
+        <div class="themes-grid">
+          <button class="theme-select-btn active" data-theme="ancient-ritual">Ancient Ritual</button>
+          <button class="theme-select-btn" data-theme="forgotten-library">Forgotten Library</button>
+          <button class="theme-select-btn" data-theme="occult-scholar">Occult Scholar</button>
+          <button class="theme-select-btn" data-theme="shadow-realm">Shadow Realm</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MULTIPLE ENDINGS CINEMATIC SCREEN -->
+  <div class="ending-overlay" id="ending-overlay">
+    <div class="ending-title" id="ending-title">THE ETERNAL LIBRARY</div>
+    <div class="ending-desc" id="ending-desc">Your memories are archived into the infinite stone shelves. The clock has dried out, the room has settled, and the diary belongs to the dust of time.</div>
+    <button class="ending-close-btn" id="ending-close-btn">Return to reality</button>
+  </div>
+
+</body>
+</html>
